@@ -99,7 +99,28 @@ public class PersonServiceImpl implements PersonService, CommandLineRunner{
 	public Iterable<CityPopulationDto> getCitiesPopulation() {
 		return personRepository.getCitiesPopulation();
 	}
+	
+	@Transactional(readOnly = true)
+	@Override
+	public ChildDto[] findAllChildren() {
+		
 
+		
+		return personRepository.findAllBy()
+								.map(c -> mapper.mapToDto(c))
+								.toArray(ChildDto[]::new);
+	}
+	
+	@Transactional(readOnly = true)
+	@Override
+	public EmployeeDto[] findEmployeesBySalary(Integer minSalary, Integer maxSalary) {
+		
+		return personRepository.findBySalaryBetween(minSalary, maxSalary)
+								.map(e -> mapper.mapToDto(e))
+								.toArray(EmployeeDto[]::new);
+	}
+	
+	
 	@Transactional
 	@Override
 	public void run(String... args) throws Exception {
@@ -117,4 +138,7 @@ public class PersonServiceImpl implements PersonService, CommandLineRunner{
 		
 	}
 
+	
+
+	
 }
